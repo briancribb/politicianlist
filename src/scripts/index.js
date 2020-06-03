@@ -1,5 +1,5 @@
 //import utils from '../../../_vendor/tmc/utils';
-import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../_vendor/tmc/tmc-utils';
+import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states_hash';
 import components from './components';
 /*

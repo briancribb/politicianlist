@@ -16,17 +16,23 @@ RC.memberList = class extends React.Component {
 			sortBy: 	'last_name',
 			modalView: 	'filters'			
 		};
+
 		this._assembleFilters 	= this._assembleFilters.bind(this);
+		this._setFilters 		= this._setFilters.bind(this);
 		this._passedFilters 	= this._passedFilters.bind(this);
 		this._getIconClass 		= this._getIconClass.bind(this);
 		this.sortMembersArray 	= this.sortMembersArray.bind(this);
 		this._getMemberItems 	= this._getMemberItems.bind(this);
 		this._handleLaunchModal = this._handleLaunchModal.bind(this);
+		this._getFilterContent  = this._getFilterContent.bind(this);
+		this._getSortingContent = this._getSortingContent.bind(this);
+
 
 		console.log('RC.memberList', this);
 	}
 
 	componentDidMount() {
+		this._setFilters()
 		this.setState({
 			filters:this._assembleFilters()
 		});
@@ -45,6 +51,12 @@ RC.memberList = class extends React.Component {
 			if (member.party_name && !objTags.hasOwnProperty(member.party_name)) objTags.party_name[member.party_name] = false;
 		});
 		return objTags;
+	}
+
+	_setFilters(newFilters) {
+		this.setState({
+			filters: newFilters
+		});
 	}
 
 	_passedFilters(member) {
@@ -110,54 +122,7 @@ RC.memberList = class extends React.Component {
 		console.log('_handleLaunchModal()', evt.target.dataset.view);
 	}
 
-	render() {
-		let that = this;
-		return (
-		<div className="container pt-3">
-			<div className="row">
-				<div className="col">
-					<div className="btn-group btn-group-lg w-100 mb-3" role="group" aria-label="Basic example">
-						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="filters" onClick={that._handleLaunchModal}>Filters</button>
-						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="sorting" onClick={that._handleLaunchModal}>Sorting</button>
-					</div>
-				</div>
-			</div>
-			<div className="row">
-				<div className="col">
-					{this._getMemberItems('both')}
-				</div>
-			</div>
-
-			<RC.modal modalView={that.state.modalView} filters={this.state.filters} sortMembersArray={this.sortMembersArray} />
-		</div>
-		);
-	}
-}
-
-RC.modal = class extends React.Component {
-	/*
-	The filters object will be managed here and used to update the filters object in the parent.
-	*/
-	constructor(props) {
-		super(props);
-		this.state = {
-			filters: 	this.props.filters
-		};
-		this._getFilterContent 	= this._getFilterContent.bind(this);
-		this._applyFilterRules 	= this._applyFilterRules.bind(this);
-		console.log('RC.modal', this);
-	}
-
-	_applyFilterRules(filterClicked) {
-		/*
-		The House is up for re-election every two years, so filtering by any available year will 
-		show all representatives. For this reason, having a year selected will automatically select 
-		the Senate. De-selecting the Senate will de-select all years.
-		*/
-	}
-
 	_getFilterContent() {
-
 		return(
 			<div className="modal-body">
 				<p>Filter by political party, election year or chamber. Keep in mind that the House comes up every two years, so election years automatically filter down to the Senate.</p>
@@ -199,36 +164,66 @@ RC.modal = class extends React.Component {
 		);
 	}
 
+
+
 	render() {
 		let that = this;
-		let markup = this.props.modalView === 'filters' ? this._getFilterContent() : this._getSortingContent();
-		let title = this.props.modalView === 'filters' ? "Filters" : "Sorting";
+		let modalMarkup = this.state.modalView === 'filters' ? this._getFilterContent() : this._getSortingContent();
+		let title = this.state.modalView === 'filters' ? "Filters" : "Sorting";
+
+
 		return (
-		<div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div className="modal-dialog">
-				<div className="modal-content">
-					<div className="modal-header">
-						<h5 className="modal-title" id="myModalLabel">{title}</h5>
-						<button type="button" className="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+		<div className="container pt-3">
+			<div className="row">
+				<div className="col">
+					<div className="btn-group btn-group-lg w-100 mb-3" role="group" aria-label="Basic example">
+						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="filters" onClick={that._handleLaunchModal}>Filters</button>
+						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="sorting" onClick={that._handleLaunchModal}>Sorting</button>
 					</div>
-					{markup}
 				</div>
 			</div>
+			<div className="row">
+				<div className="col">
+					{this._getMemberItems('both')}
+				</div>
+			</div>
+
+
+			<div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div className="modal-dialog">
+					<div className="modal-content">
+						<div className="modal-header">
+							<h5 className="modal-title" id="myModalLabel">{title}</h5>
+							<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						{modalMarkup}
+					</div>
+				</div>
+			</div>
+
 		</div>
 		);
 	}
 }
 
+RC.button = class extends React.Component {
+	/*
+	This button sends its 
+	*/
+	constructor(props) {
+		super(props);
+		this.state = {};
+		console.log('RC.button', this);
+	}
+	render() {
 
-
-
-
-
-
-
-
+		return (
+			<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">{this.props.text}</button>
+		);
+	}
+}
 
 return RC;
 }
