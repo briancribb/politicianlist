@@ -1,7 +1,8 @@
 //import utils from '../../../_vendor/tmc/utils';
 import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states_hash';
-import components from './components';
+import memberList from './components/memberlist';
+import modal from './components/modal';
 /*
 Member objects from ProPublica only have abbreviations for states, so this handy 
 object will provide full names. Changed it from JSON to JS so I could import it.
@@ -25,8 +26,7 @@ object is the bioguide property for the image.
 https://github.com/unitedstates/images
 https://theunitedstates.io/images/congress/[size]/[bioguide].jpg
 */
-
-let RC = components();
+let RC = {memberList,modal};
 let POL = {
 	congress: 116,
 	stuff:function(){
@@ -126,19 +126,15 @@ let POL = {
 		}
 
 		Promise.all([housePromise, senatePromise]).then((allResults)=>{
-			console.log('allResults', allResults);
+			//console.log('allResults', allResults);
 			//console.log('members', allResults[0].concat(allResults[1]));
 
 			ReactDOM.render(
-				<RC.memberList members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
+				<RC.memberList parent={RC} members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
 			);
 
 		});
-
-
-
-
-
+		console.log('POL, RC', POL, RC);
 	},
 	getAllMembers : function() {
 		return this.senate.members.concat(this.house.members);
@@ -153,6 +149,7 @@ let POL = {
 	},
 	utils: {}
 }
+
 $(document).ready(function(){
 	POL.init();
 });
