@@ -76,12 +76,10 @@ let POL = {
 				"I":"Independent"
 			}
 
-
 			// Prep for duplicates and filter down to members who are currently in office.
 			let updatedMembers = [],
 				objDoubles = {},
 				everyone = obj.members.filter((item)=>{return item.in_office === true});
-
 
 			// Separate duplicate entries into objects, each contains an array of dupes.
 			everyone.forEach((member)=>{
@@ -90,6 +88,15 @@ let POL = {
 				member.party_name = objParties[member.party] || "Independent";
 				member.state_name = states[member.state];
 				member.chamber = obj.chamber;
+
+				let birthDate = new Date(member.date_of_birth);
+				let today = new Date();
+				let age = today.getFullYear() - birthDate.getFullYear();
+				let m = today.getMonth() - birthDate.getMonth();
+				if (m < 0 || m === 0 && today.getDate() < birthDate.getDate() ) {
+					age--; // Hasn't had a birthday this year.
+				}
+				member.age = age;
 
 				if (everyone.filter((m)=>{return m.id===member.id}).length > 1) {
 					// Make an array if there isn't one yet, then add member to it.
@@ -100,7 +107,6 @@ let POL = {
 					updatedMembers.push(member);
 				}
 			});
-
 
 			/*
 			Each object in this array contains duplicates. The dupes have different last_updated

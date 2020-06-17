@@ -13,6 +13,7 @@ let memberList = class extends React.Component {
 
 		this._assembleFilters 	= this._assembleFilters.bind(this);
 		this._updateFilter 			= this._updateFilter.bind(this);
+		this._resetFilters 			= this._resetFilters.bind(this);
 		this._passedFilters 		= this._passedFilters.bind(this);
 		this._getIconClass 			= this._getIconClass.bind(this);
 		this._sortMembersArray 	= this._sortMembersArray.bind(this);
@@ -58,7 +59,15 @@ let memberList = class extends React.Component {
 
 	_resetFilters() {
 		// Sets all filters to false.
-		console.log('_resetFilters()');
+		this.setState((prevState)=>{
+			let filters = { ...prevState.filters };
+			Object.keys(filters).forEach((category)=>{
+				Object.keys(filters[category]).forEach((filter)=>{
+					filters[category][filter] = false;
+				});
+			});
+			return { filters };
+		});
 	}
 
 	_passedFilters(member) {

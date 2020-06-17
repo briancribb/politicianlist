@@ -15,7 +15,6 @@ let modal = class extends React.Component {
 		let buttonMarkup = Object.keys(this.props.filters).map((filterCat)=>{
 			let objFilter = this.props.filters[filterCat];
 
-
 			return(
 				<div key={filterCat} className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
 					{
@@ -49,14 +48,14 @@ let modal = class extends React.Component {
 			<div className="modal-body">
 				<p>Sort the members list by a chosen property.</p>
 				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">First Name</button>
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Last Name</button>
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Chamber</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="first_name" className="d-inline-block btn btn-light flex-fill border border-dark m-1">First Name</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="last_name" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Last Name</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="chamber" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Chamber</button>
 				</div>
 				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Age</button>
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Seniority</button>
-					<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Next Election</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="age" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Age</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="seniority" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Seniority</button>
+					<button type="button" onClick={this._handleSortingClick} data-sortby="next_election" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Next Election</button>
 				</div>
 			</div>
 		);
