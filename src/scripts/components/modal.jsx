@@ -3,11 +3,26 @@
 let modal = class extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			sortrows: [
+				[ 
+					{key: 'first_name', value: "First Name"}, 
+					{key: 'last_name', value: "Last Name"}, 
+					{key: 'chamber', value: "Chamber"}
+				],
+				[ 
+					{key: 'age', value: "Age"}, 
+					{key: 'seniority', value: "Seniority"}, 
+					{key: 'next_election', value: "Next Election"}
+				]
+			]
+		};
+
 		this._getFilterContent  = this._getFilterContent.bind(this);
 		this._getSortingContent = this._getSortingContent.bind(this);
+		this._handleSortClick 	= this._handleSortClick.bind(this);
 		this._handleFilterClick = this._handleFilterClick.bind(this);
-		this._handleResetClick = this._handleResetClick.bind(this);
+		this._handleResetClick 	= this._handleResetClick.bind(this);
 	}
 
 	_getFilterContent() {
@@ -43,20 +58,27 @@ let modal = class extends React.Component {
 	}
 
 	_getSortingContent() {
+		let sortingMarkup = this.state.sortrows.map((arrRow)=>{
+			return(
+				<div key={arrRow[0].key} className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+					{
+						arrRow.map((objButton)=>{
+
+							let buttonType = this.props.sortBy === objButton.key ? 'btn-secondary' : 'btn-light';
+							return(
+								<button key={objButton.value} data-sortkey={objButton.key} type="button" onClick={this._handleSortClick} className={'d-inline-block btn '+buttonType+' flex-fill border border-dark m-1'}>{objButton.value}</button>
+							);
+						})
+					}
+				</div>
+			);
+
+		});
 
 		return(
 			<div className="modal-body">
 				<p>Sort the members list by a chosen property.</p>
-				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
-					<button type="button" onClick={this._handleSortingClick} data-sortby="first_name" className="d-inline-block btn btn-light flex-fill border border-dark m-1">First Name</button>
-					<button type="button" onClick={this._handleSortingClick} data-sortby="last_name" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Last Name</button>
-					<button type="button" onClick={this._handleSortingClick} data-sortby="chamber" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Chamber</button>
-				</div>
-				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
-					<button type="button" onClick={this._handleSortingClick} data-sortby="age" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Age</button>
-					<button type="button" onClick={this._handleSortingClick} data-sortby="seniority" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Seniority</button>
-					<button type="button" onClick={this._handleSortingClick} data-sortby="next_election" className="d-inline-block btn btn-light flex-fill border border-dark m-1">Next Election</button>
-				</div>
+				{sortingMarkup}
 			</div>
 		);
 	}
@@ -69,6 +91,12 @@ let modal = class extends React.Component {
 	_handleResetClick(evt) {
 		this.props.resetFilters();
 	}
+
+	_handleSortClick(evt) {
+		//console.log('_handleFilterClick()', evt.target.dataset.category, evt.target.dataset.filter);
+		this.props.updateSort(evt.target.dataset.sortkey);
+	}
+
 
 	render() {
 		let that = this;

@@ -12,11 +12,12 @@ let memberList = class extends React.Component {
 		};
 
 		this._assembleFilters 	= this._assembleFilters.bind(this);
+		this._updateSort	 			= this._updateSort.bind(this);
 		this._updateFilter 			= this._updateFilter.bind(this);
 		this._resetFilters 			= this._resetFilters.bind(this);
 		this._passedFilters 		= this._passedFilters.bind(this);
 		this._getIconClass 			= this._getIconClass.bind(this);
-		this._sortMembersArray 	= this._sortMembersArray.bind(this);
+		this._getSortedMembers 	= this._getSortedMembers.bind(this);
 		this._getMemberItems 		= this._getMemberItems.bind(this);
 		this._handleLaunchModal = this._handleLaunchModal.bind(this);
 
@@ -45,17 +46,21 @@ let memberList = class extends React.Component {
 		return objTags;
 	}
 
+	_updateSort(sortBy = null) {
+		if (!sortBy || sortBy === this.state.sortBy) return;
+		this.setState({sortBy});// ES6 shorthand for {sortBy:sortBy}
+	}
+
 	_updateFilter(category = null, filter = null) {
 		console.log('_updateFilter()', arguments);
 
 		if (!category || !filter) return;
 		this.setState((prevState)=>{
-			let filters = { ...prevState.filters }; // Copy the filters object from the state. ES6 shorthand for Object.assign()
-			filters[category][filter] = !filters[category][filter]; 			// Update the target property                
-			return { filters };                   	// Return new filters object. ES6 shorthand for {filters:filters}
+			let filters = { ...prevState.filters };									// Copy the filters object from the state. ES6 shorthand for Object.assign()
+			filters[category][filter] = !filters[category][filter];	// Update the target property                
+			return { filters };                   									// Return new filters object. ES6 shorthand for {filters:filters}
 		});
 	}
-
 
 	_resetFilters() {
 		// Sets all filters to false.
@@ -84,7 +89,9 @@ let memberList = class extends React.Component {
 		return objClasses[party] || objClasses['I'];
 	}
 
-	_sortMembersArray(property = 'last_name') {
+	_getSortedMembers() {
+		console.log('_getSortedMembers - property');
+		return;
 		this.state.members.sort(function(a,b){
 			let itemA = a[property].toUpperCase();
 			let itemB = b[property].toUpperCase();
@@ -95,8 +102,9 @@ let memberList = class extends React.Component {
 	}
 
 	_getMemberItems(chamber = 'both') {
-		this._sortMembersArray();
-		let members = this.state.members;
+
+		let members = this._getSortedMembers(); // This will return a new and sorted array of members.
+		//let members = this.state.members;
 
 		if(!this._passedFilters()) return false;
 
@@ -156,7 +164,7 @@ let memberList = class extends React.Component {
 					{this._getMemberItems('both')}
 				</div>
 			</div>
-			<RC.modal updateFilter={this._updateFilter} resetFilters={this._resetFilters} modalView={that.state.modalView} sortBy={that.state.sortBy} filters={that.state.filters} />
+			<RC.modal updateSort={this._updateSort} updateFilter={this._updateFilter} resetFilters={this._resetFilters} modalView={that.state.modalView} sortBy={that.state.sortBy} filters={that.state.filters} />
 		</div>
 		);
 	}
