@@ -17,7 +17,7 @@ let memberList = class extends React.Component {
 		this._resetFilters 			= this._resetFilters.bind(this);
 		this._passedFilters 		= this._passedFilters.bind(this);
 		this._getIconClass 			= this._getIconClass.bind(this);
-		this._getSortedMembers 	= this._getSortedMembers.bind(this);
+		this._getFilteredSorted 	= this._getFilteredSorted.bind(this);
 		this._getMemberItems 		= this._getMemberItems.bind(this);
 		this._handleLaunchModal = this._handleLaunchModal.bind(this);
 
@@ -75,11 +75,6 @@ let memberList = class extends React.Component {
 		});
 	}
 
-	_passedFilters(member) {
-		// Run logic to see if a member should be shown.
-		return true;
-	}
-
 	_getIconClass(party) {
 		let objClasses = {
 			"R":"fas fa-republican",
@@ -89,12 +84,44 @@ let memberList = class extends React.Component {
 		return objClasses[party] || objClasses['I'];
 	}
 
-	_getSortedMembers() {
-		console.log('_getSortedMembers - property');
-		return;
-		this.state.members.sort(function(a,b){
-			let itemA = a[property].toUpperCase();
-			let itemB = b[property].toUpperCase();
+	_passedFilters(member) {
+		/*
+		Run logic to see if a member should be shown.
+		Calling these properties categories and filters just to organize them in my brain.
+		- Categories are the property keys in the member object. Ex. "next_election".
+		- Filters are the possible values that the category can have. Ex. "2020", "2022".
+		- If a filter is true then that value must be present. For example, if "2022" is 
+			true then a member's "next_election" property must be "2022" in order to pass.
+		-	Multiple filters are okay. If a member has "2020" and both "2020" and "2022" are 
+			selected, then it will pass because it has one of the selected values. This means 
+			that having both "House" and "Senate" selected would be the same as having neither 
+			of them selected.
+
+		1.	Loop through the categories. Each one is a property in a member.
+		2.	Loop through the filters in the category. If there are true values, then the 
+				member must match one of them in order to pass.
+		3.	If there are no true values, then no check is required. Continue with the loop.
+		*/
+
+
+
+
+		return true;
+	}
+
+	/*
+	Returns a new array that passes filter tests and is then sorted.
+	*/
+	_getFilteredSorted() {
+
+		let members = this.state.members.filter((member)=>{
+			return this._passedFilters();
+		});
+
+		console.log('_getFilteredSorted');
+		members.sort(function(a,b){
+			let itemA = a[this.state.sortBy].toUpperCase();
+			let itemB = b[this.state.sortBy].toUpperCase();
 			if (itemA < itemB) return -1;
 			if (itemA > itemB) return 1;
 			return 0;
@@ -103,7 +130,7 @@ let memberList = class extends React.Component {
 
 	_getMemberItems(chamber = 'both') {
 
-		let members = this._getSortedMembers(); // This will return a new and sorted array of members.
+		let members = this._getFilteredSorted(); // This will return a new and sorted array of members.
 		//let members = this.state.members;
 
 		if(!this._passedFilters()) return false;
