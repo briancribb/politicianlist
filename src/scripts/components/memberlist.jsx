@@ -52,8 +52,6 @@ let memberList = class extends React.Component {
 	}
 
 	_updateFilter(category = null, filter = null) {
-		console.log('_updateFilter()', arguments);
-
 		if (!category || !filter) return;
 		this.setState((prevState)=>{
 			let filters = { ...prevState.filters };									// Copy the filters object from the state. ES6 shorthand for Object.assign()
@@ -104,7 +102,23 @@ let memberList = class extends React.Component {
 		*/
 
 
+		let objFilters = this.state.filters;
+		Object.keys(objFilters).forEach((category)=>{
+			// If they're all false, then give this category a pass.
+			if ( Object.keys(category).every((filter)=>{filter===false}) ) return;
 
+			let trueFilters = Object.keys(objFilters[category]).filter((filter)=>{
+				return objFilters[category][filter]===true;
+			});
+
+			// Now we have an array of true values, like ["2020","2024"]
+
+
+
+
+
+
+		});
 
 		return true;
 	}
@@ -113,25 +127,24 @@ let memberList = class extends React.Component {
 	Returns a new array that passes filter tests and is then sorted.
 	*/
 	_getFilteredSorted() {
-
 		let members = this.state.members.filter((member)=>{
-			return this._passedFilters();
+			return true;//this._passedFilters();
 		});
 
-		console.log('_getFilteredSorted');
-		members.sort(function(a,b){
-			let itemA = a[this.state.sortBy].toUpperCase();
-			let itemB = b[this.state.sortBy].toUpperCase();
+		members.sort((a,b)=>{
+			let itemA = a[this.state.sortBy].toString().toUpperCase();
+			let itemB = b[this.state.sortBy].toString().toUpperCase();
 			if (itemA < itemB) return -1;
 			if (itemA > itemB) return 1;
 			return 0;
 		});
+		return members;
 	}
 
 	_getMemberItems(chamber = 'both') {
 
 		let members = this._getFilteredSorted(); // This will return a new and sorted array of members.
-		//let members = this.state.members;
+		this._passedFilters(members[0]);
 
 		if(!this._passedFilters()) return false;
 
