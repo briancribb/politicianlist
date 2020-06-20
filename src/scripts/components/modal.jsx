@@ -31,7 +31,7 @@ let modal = class extends React.Component {
 			let objFilter = this.props.filters[filterCat];
 
 			return(
-				<div key={filterCat} className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+				<div key={filterCat} className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					{
 						Object.keys(objFilter).map((filterBool)=>{
 							let buttonType = this.props.filters[filterCat][filterBool] ? 'btn-secondary' : 'btn-light';
@@ -47,7 +47,7 @@ let modal = class extends React.Component {
 		return(
 			<div className="modal-body">
 				<p>Filter by political party, election year or chamber. Keep in mind that the House comes up every two years, so election years automatically filter down to the Senate.</p>
-				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+				<div className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					<button type="button" onClick={this._handleResetClick} className="d-inline-block btn btn-light flex-fill border border-dark m-1">Reset Filters</button>
 				</div>
 				{
@@ -61,7 +61,7 @@ let modal = class extends React.Component {
 		let reverseButtonType = this.props.reverse ? 'btn-secondary' : 'btn-light';
 		let sortingMarkup = this.state.sortrows.map((arrRow)=>{
 			return(
-				<div key={arrRow[0].key} className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+				<div key={arrRow[0].key} className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					{
 						arrRow.map((objButton)=>{
 
@@ -79,7 +79,7 @@ let modal = class extends React.Component {
 		return(
 			<div className="modal-body">
 				<p>Sort the members list by a chosen property.</p>
-				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+				<div className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					<button type="button" data-reverse="true" onClick={this._handleSortClick} className={'d-inline-block btn '+reverseButtonType+' flex-fill border border-dark m-1'}>Reverse Sort</button>
 				</div>
 				{sortingMarkup}
