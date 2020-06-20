@@ -29,9 +29,6 @@ https://theunitedstates.io/images/congress/[size]/[bioguide].jpg
 let RC = {memberList,modal};
 let POL = {
 	congress: 116,
-	stuff:function(){
-		console.log('Called from the components module!', this);
-	},
 	init: function() {
 
 		this.utils = setupUtils();
@@ -132,15 +129,11 @@ let POL = {
 		}
 
 		Promise.all([housePromise, senatePromise]).then((allResults)=>{
-			//console.log('allResults', allResults);
-			//console.log('members', allResults[0].concat(allResults[1]));
-
 			ReactDOM.render(
 				<RC.memberList parent={RC} members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
 			);
-
 		});
-		console.log('POL, RC', POL, RC);
+		//console.log('POL, RC', POL, RC);
 	},
 	getAllMembers : function() {
 		return this.senate.members.concat(this.house.members);

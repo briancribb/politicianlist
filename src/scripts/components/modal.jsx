@@ -58,6 +58,7 @@ let modal = class extends React.Component {
 	}
 
 	_getSortingContent() {
+		let reverseButtonType = this.props.reverse ? 'btn-secondary' : 'btn-light';
 		let sortingMarkup = this.state.sortrows.map((arrRow)=>{
 			return(
 				<div key={arrRow[0].key} className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
@@ -78,13 +79,15 @@ let modal = class extends React.Component {
 		return(
 			<div className="modal-body">
 				<p>Sort the members list by a chosen property.</p>
+				<div className="d-flex flex-wrap flex-sm-nowrap justify-content-center">
+					<button type="button" data-reverse="true" onClick={this._handleSortClick} className={'d-inline-block btn '+reverseButtonType+' flex-fill border border-dark m-1'}>Reverse Sort</button>
+				</div>
 				{sortingMarkup}
 			</div>
 		);
 	}
 
 	_handleFilterClick(evt) {
-		//console.log('_handleFilterClick()', evt.target.dataset.category, evt.target.dataset.filter);
 		this.props.updateFilter(evt.target.dataset.category, evt.target.dataset.filter);
 	}
 
@@ -93,10 +96,12 @@ let modal = class extends React.Component {
 	}
 
 	_handleSortClick(evt) {
-		//console.log('_handleFilterClick()', evt.target.dataset.category, evt.target.dataset.filter);
-		this.props.updateSort(evt.target.dataset.sortkey);
+		if (evt.target.dataset.reverse) {
+			this.props.reverseSort();
+		} else {
+			this.props.updateSort(evt.target.dataset.sortkey);
+		}
 	}
-
 
 	render() {
 		let that = this;

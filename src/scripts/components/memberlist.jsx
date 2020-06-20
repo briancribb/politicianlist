@@ -7,12 +7,14 @@ let memberList = class extends React.Component {
 			members:  	this.props.members,
 			RC:  	this.props.parent,
 			filters: 	{},
+			reverse: 	false,
 			sortBy: 	'last_name',
 			modalView: 	'filters'		
 		};
 
 		this._assembleFilters 	= this._assembleFilters.bind(this);
 		this._updateSort	 			= this._updateSort.bind(this);
+		this._reverseSort 			= this._reverseSort.bind(this);
 		this._updateFilter 			= this._updateFilter.bind(this);
 		this._resetFilters 			= this._resetFilters.bind(this);
 		this._passedFilters 		= this._passedFilters.bind(this);
@@ -21,8 +23,6 @@ let memberList = class extends React.Component {
 		this._getMemberItems 		= this._getMemberItems.bind(this);
 		this._handleLaunchModal = this._handleLaunchModal.bind(this);
 
-
-		console.log('memberList', this);
 	}
 
 	componentDidMount() {
@@ -49,6 +49,11 @@ let memberList = class extends React.Component {
 	_updateSort(sortBy = null) {
 		if (!sortBy || sortBy === this.state.sortBy) return;
 		this.setState({sortBy});// ES6 shorthand for {sortBy:sortBy}
+	}
+
+	_reverseSort() {
+		let reverse = this.state.reverse ? false : true; // Opposite of the current state.
+		this.setState({reverse});// ES6 shorthand for {reverse:reverse}
 	}
 
 	_updateFilter(category = null, filter = null) {
@@ -101,26 +106,38 @@ let memberList = class extends React.Component {
 		3.	If there are no true values, then no check is required. Continue with the loop.
 		*/
 
-
 		let objFilters = this.state.filters;
+		let matchesFilters = true;
 		Object.keys(objFilters).forEach((category)=>{
-			// If they're all false, then give this category a pass.
-			if ( Object.keys(category).every((filter)=>{filter===false}) ) return;
 
 			let trueFilters = Object.keys(objFilters[category]).filter((filter)=>{
 				return objFilters[category][filter]===true;
 			});
 
-			// Now we have an array of true values, like ["2020","2024"]
+			// If they're all false, then give this category a pass.
+			if (!trueFilters.length) return;
 
+			/*
+			Now we have an array of true values, like ["2020","2024"]
+			The member must have a value that matches something in the array.
+			*/
+			if (!trueFilters.includes(member[category])) {
+				matchesFilters = false;
+			}
 
-
-
+			/*
+			One more check to do. If we're filtering by the next election, then the House 
+			will always pass because they come up every two years. The only reason to filter 
+			by year is to find out when a Senator is up for re-election. If a year is chosen, 
+			fail this check for Representatives.
+			*/
+			if (category === 'next_election' && member.chamber === "House") {
+				matchesFilters = false;
+			}
 
 
 		});
-
-		return true;
+		return matchesFilters;
 	}
 
 	/*
@@ -128,14 +145,21 @@ let memberList = class extends React.Component {
 	*/
 	_getFilteredSorted() {
 		let members = this.state.members.filter((member)=>{
-			return true;//this._passedFilters();
+			return this._passedFilters(member);
 		});
 
 		members.sort((a,b)=>{
 			let itemA = a[this.state.sortBy].toString().toUpperCase();
 			let itemB = b[this.state.sortBy].toString().toUpperCase();
+
+			// If sorting is reversed
+			if (itemA < itemB && this.state.reverse) return 1;
+			if (itemA > itemB && this.state.reverse) return -1;
+
+			// Regular sorting.
 			if (itemA < itemB) return -1;
 			if (itemA > itemB) return 1;
+
 			return 0;
 		});
 		return members;
@@ -144,9 +168,8 @@ let memberList = class extends React.Component {
 	_getMemberItems(chamber = 'both') {
 
 		let members = this._getFilteredSorted(); // This will return a new and sorted array of members.
-		this._passedFilters(members[0]);
 
-		if(!this._passedFilters()) return false;
+		//this._passedFilters(members[0]);
 
 		return members.map((member) =>{
 			let partyColor = 'success';
@@ -178,7 +201,6 @@ let memberList = class extends React.Component {
 	_handleLaunchModal(evt) {
 		this.setState({modalView:evt.target.dataset.view});
 		$('#myModal').modal('show');
-		//console.log('_handleLaunchModal()', evt.target.dataset.view);
 	}
 
 	render() {
@@ -204,7 +226,7 @@ let memberList = class extends React.Component {
 					{this._getMemberItems('both')}
 				</div>
 			</div>
-			<RC.modal updateSort={this._updateSort} updateFilter={this._updateFilter} resetFilters={this._resetFilters} modalView={that.state.modalView} sortBy={that.state.sortBy} filters={that.state.filters} />
+			<RC.modal updateSort={this._updateSort} reverseSort={this._reverseSort} updateFilter={this._updateFilter} resetFilters={this._resetFilters} modalView={that.state.modalView} reverse={that.state.reverse} sortBy={that.state.sortBy} filters={that.state.filters} />
 		</div>
 		);
 	}
