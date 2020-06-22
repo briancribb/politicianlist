@@ -7,4 +7,4 @@ Politilist is a small React app gives you a list of all current members of the 1
 This is mentioned in the filter modal in the app, but I don't mind saying it twice. Since representatives are up for re-election every two years, filtering by the election year eliminates the House from the list. Otherwise the senators you're looking for would be mixed in with hundreds of representatives.
 
 ## Another Note
-The name "Politilist" is short for "Political List". I chose it for simplicity, and because it's the kind of word that can go comically wrong if you say it out loud too fast.
+The name "Politilist" is short for "Political List". I chose it for simplicity, and because it's the kind of word that can go comically wrong if you say it out loud too fast. :-)

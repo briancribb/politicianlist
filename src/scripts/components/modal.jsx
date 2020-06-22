@@ -1,5 +1,4 @@
 // https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
-
 let modal = class extends React.Component {
 	constructor(props) {
 		super(props);
