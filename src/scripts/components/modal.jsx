@@ -6,12 +6,10 @@ let modal = class extends React.Component {
 			sortrows: [
 				[ 
 					{key: 'first_name', value: "First Name"}, 
-					{key: 'last_name', value: "Last Name"}, 
-					{key: 'chamber', value: "Chamber"}
+					{key: 'last_name', value: "Last Name"}
 				],
 				[ 
 					{key: 'age', value: "Age"}, 
-					{key: 'seniority', value: "Seniority"}, 
 					{key: 'next_election', value: "Next Election"}
 				]
 			]
@@ -77,7 +75,7 @@ let modal = class extends React.Component {
 
 		return(
 			<div className="modal-body">
-				<p>Sort the members list by a chosen property.</p>
+				<p>Sort the members list by a chosen property. Defaults to ascending order</p>
 				<div className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					<button type="button" data-reverse="true" onClick={this._handleSortClick} className={'d-inline-block btn '+reverseButtonType+' flex-fill border border-dark m-1'}>Reverse Sort</button>
 				</div>

@@ -187,11 +187,14 @@ let memberList = class extends React.Component {
 					<div className={'card-header bg-'+partyColor+' text-white d-flex justify-content-between'}>
 						<div><i className={this._getIconClass(member.party) + ' mr-2'}></i>
 						{member.party_name}</div>
-						<div><strong>{member.next_election}</strong></div>
+						<div>Next: <strong>{member.next_election}</strong></div>
 					</div>
 					<div className="card-body">
 						<h5 className="card-title">{member.short_title + ' ' + member.first_name + ' ' + member.last_name}</h5>
-						<p className="mb-0">{member.state_name}</p>						
+						<div className="d-md-flex justify-content-between">
+							<div>{member.state_name}</div>
+							<div>{'Age: '+member.age}</div>
+						</div>
 					</div>
 				</div>
 			);
