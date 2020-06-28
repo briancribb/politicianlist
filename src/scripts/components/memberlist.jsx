@@ -211,10 +211,10 @@ let memberList = class extends React.Component {
 		let RC = this.state.RC;
 
 		return (
-		<div className="container pt-3">
+		<div className="container">
 			<div className="row">
 				<div className="col">
-				<p>This is a list of all active members of the 116th Congress, using data from ProPublica. Started out as a list of when senators are up for re-election. Made by <a title="The Mighty Cribb website" href="https://www.themightycribb.com/">Brian Cribb</a> using <a title="Politilist GitHub Repository" href="https://github.com/briancribb/politilist">this GitHub repo</a>.</p>
+					<p>This is a list of all active members of the 116th Congress, using data from ProPublica. Started out as a list of when senators are up for re-election. Made by <a title="The Mighty Cribb website" href="https://www.themightycribb.com/">Brian Cribb</a> using <a title="Politilist GitHub Repository" href="https://github.com/briancribb/politilist">this GitHub repo</a>.</p>
 				</div>
 			</div>
 			<div className="row">
