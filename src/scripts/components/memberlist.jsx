@@ -214,11 +214,6 @@ let memberList = class extends React.Component {
 		<div className="container">
 			<div className="row">
 				<div className="col">
-					<p>This is a list of all active members of the 116th Congress, using data from ProPublica. Started out as a list of when senators are up for re-election. Made by <a title="The Mighty Cribb website" href="https://www.themightycribb.com/">Brian Cribb</a> using <a title="Politilist GitHub Repository" href="https://github.com/briancribb/politilist">this GitHub repo</a>.</p>
-				</div>
-			</div>
-			<div className="row">
-				<div className="col">
 					<div className="btn-group btn-group-lg w-100 mb-3" role="group" aria-label="Modal launch buttons">
 						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="filters" onClick={that._handleLaunchModal}>Filters</button>
 						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="sorting" onClick={that._handleLaunchModal}>Sorting</button>
