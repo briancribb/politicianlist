@@ -203,7 +203,7 @@ let memberList = class extends React.Component {
 							</div>
 							<div className="member-info-wrapper">
 								<h5 className="card-title mb-1">{this._getMemberName(member)}</h5>
-								<div className="mb-1">{member.state_name}</div>
+								<div className="mb-0">{member.state_name}</div>
 								<div className="mb-0">{'Age: '+member.age}</div>
  							</div>
 						</div>
