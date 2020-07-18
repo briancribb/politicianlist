@@ -3,3 +3,14 @@
 // These are styles which override the Bootstrap default framework.
 // For example, changing the padding for containers.
 
+.container {
+	max-width: 540px;
+}
+
+
+
+@include media-breakpoint-up(lg) {
+	.container {
+		max-width: 720px;
+	}
+}

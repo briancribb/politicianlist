@@ -202,9 +202,9 @@ let memberList = class extends React.Component {
 								</div>
 							</div>
 							<div className="member-info-wrapper">
-								<h5 className="card-title">{this._getMemberName(member)}</h5>
-								<div className="mb-2">{member.state_name}</div>
-								<div>{'Age: '+member.age}</div>
+								<h5 className="card-title mb-1">{this._getMemberName(member)}</h5>
+								<div className="mb-1">{member.state_name}</div>
+								<div className="mb-0">{'Age: '+member.age}</div>
  							</div>
 						</div>
 					</div>
@@ -227,7 +227,7 @@ let memberList = class extends React.Component {
 		let RC = this.state.RC;
 
 		return (
-		<div className="container-sm">
+		<div className="container">
 			<div className="row">
 				<div className="col">
 					<div className="btn-group btn-group-lg w-100 mb-3" role="group" aria-label="Modal launch buttons">
