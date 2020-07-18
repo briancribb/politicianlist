@@ -12,8 +12,8 @@ let memberList = class extends React.Component {
 			modalView: 	'filters'		
 		};
 
-		this._assembleFilters 	= this._assembleFilters.bind(this);
-		this._updateSort	 			= this._updateSort.bind(this);
+		this._assembleFilters 		= this._assembleFilters.bind(this);
+		this._updateSort	 		= this._updateSort.bind(this);
 		this._reverseSort 			= this._reverseSort.bind(this);
 		this._updateFilter 			= this._updateFilter.bind(this);
 		this._resetFilters 			= this._resetFilters.bind(this);
@@ -21,8 +21,9 @@ let memberList = class extends React.Component {
 		this._getIconClass 			= this._getIconClass.bind(this);
 		this._getFilteredSorted 	= this._getFilteredSorted.bind(this);
 		this._getMemberItems 		= this._getMemberItems.bind(this);
-		this._handleLaunchModal = this._handleLaunchModal.bind(this);
-
+		this._getMemberName 		= this._getMemberName.bind(this);
+		this._handleLaunchModal 	= this._handleLaunchModal.bind(this);
+		this._handleImageError 		= this._handleImageError.bind(this);
 	}
 
 	componentDidMount() {
@@ -165,11 +166,13 @@ let memberList = class extends React.Component {
 		return members;
 	}
 
+	_getMemberName(member) {
+		return member.short_title + ' ' + member.first_name + ' ' + member.last_name;
+	}
+
 	_getMemberItems(chamber = 'both') {
 
 		let members = this._getFilteredSorted(); // This will return a new and sorted array of members.
-
-		//this._passedFilters(members[0]);
 
 		return members.map((member) =>{
 			let partyColor = 'success';
@@ -183,22 +186,35 @@ let memberList = class extends React.Component {
 			}
 
 			return(
-				<div className={'card mb-3 border border-'+partyColor} key={member.id}>
+				<div data-member-id={member.id} className={'card mb-3 border border-'+partyColor} key={member.id}>
 					<div className={'card-header bg-'+partyColor+' text-white d-flex justify-content-between'}>
 						<div><i className={this._getIconClass(member.party) + ' mr-2'}></i>
 						{member.party_name}</div>
 						<div>Next: <strong>{member.next_election}</strong></div>
 					</div>
 					<div className="card-body">
-						<h5 className="card-title">{member.short_title + ' ' + member.first_name + ' ' + member.last_name}</h5>
-						<div className="d-md-flex justify-content-between">
-							<div>{member.state_name}</div>
-							<div>{'Age: '+member.age}</div>
+						<div className="d-flex">
+							<div className="member-photo-wrapper mr-2 mr-md-3">
+								<img className="member-photo img-fluid" onError={this._handleImageError} src={'https://theunitedstates.io/images/congress/225x275/'+ member.id +'.jpg'} loading="lazy" alt={'Photo of ' + this._getMemberName(member)} />
+								<div className="missing-photo text-center">
+									<i className="fas fa-user mb-3 text-secondary"></i>
+									<small className="d-block">Photo not available</small>
+								</div>
+							</div>
+							<div className="member-info-wrapper">
+								<h5 className="card-title">{this._getMemberName(member)}</h5>
+								<div className="mb-2">{member.state_name}</div>
+								<div>{'Age: '+member.age}</div>
+ 							</div>
 						</div>
 					</div>
 				</div>
 			);
 		});
+	}
+
+	_handleImageError(evt) {
+		evt.target.parentElement.classList.add('image-error');
 	}
 
 	_handleLaunchModal(evt) {
@@ -211,7 +227,7 @@ let memberList = class extends React.Component {
 		let RC = this.state.RC;
 
 		return (
-		<div className="container">
+		<div className="container-sm">
 			<div className="row">
 				<div className="col">
 					<div className="btn-group btn-group-lg w-100 mb-3" role="group" aria-label="Modal launch buttons">

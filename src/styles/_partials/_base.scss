@@ -1,0 +1,35 @@
+.member-photo-wrapper {
+	max-width: 30%;
+	.missing-photo {
+		display:none;
+	}
+	&.image-error {
+		.member-photo {
+			display:none;
+		}
+		.missing-photo {
+			display:block;
+		}
+	}
+}
+.member-info-wrapper {
+	max-width: 70%;
+}
+
+
+
+.missing-photo .fa-user {
+	font-size:4rem;
+}
+
+
+@include media-breakpoint-up(sm) {
+	.missing-photo .fa-user {
+		font-size:5rem;
+	}
+}
+@include media-breakpoint-up(md) {
+	.missing-photo .fa-user {
+		font-size:6rem;
+	}
+}
