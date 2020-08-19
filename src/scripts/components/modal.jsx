@@ -26,7 +26,7 @@ let modal = class extends React.Component {
 		let that = this;
 		let buttonMarkup = Object.keys(this.props.filters).map((filterCat)=>{
 			let objFilter = this.props.filters[filterCat];
-
+			if (filterCat.toLowerCase() === 'text') return;
 			return(
 				<div key={filterCat} className="d-flex flex-wrap flex-sm-nowrap flex-lg-wrap justify-content-center">
 					{

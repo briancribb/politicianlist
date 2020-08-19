@@ -9,7 +9,7 @@ let memberList = class extends React.Component {
 			filters: 	{},
 			reverse: 	false,
 			sortBy: 	'last_name',
-			modalView: 	'filters'		
+			modalView: 	'filters'	
 		};
 
 		this._assembleFilters 		= this._assembleFilters.bind(this);
@@ -24,23 +24,27 @@ let memberList = class extends React.Component {
 		this._getMemberName 		= this._getMemberName.bind(this);
 		this._handleLaunchModal 	= this._handleLaunchModal.bind(this);
 		this._handleImageError 		= this._handleImageError.bind(this);
+		this._handleInputChange 	= this._handleInputChange.bind(this);
 	}
 
 	componentDidMount() {
 		this.setState({
 			filters:this._assembleFilters()
 		});
+		window.getState = ()=>{
+			return this.state;
+		};
 	}
 
 	_assembleFilters() {
 		let objTags = {
 			next_election:{},
 			party_name:{},
-			chamber: {'Senate':false,'House':false}
+			chamber: {'Senate':false,'House':false},
+			text: {name:''}
 		};
 		this.state.members.forEach((member)=>{
-			//if (member.next_election && !objTags.next_election.includes(member.next_election)) objTags.next_election.push(member.next_election);
-			//if (member.party_name && !objTags.party_name.includes(member.party_name)) objTags.party_name.push(member.party_name);
+			// Add filter tags for each election year and party found in the data.
 			if (member.next_election && !objTags.hasOwnProperty(member.next_election)) objTags.next_election[member.next_election] = false;
 			if (member.party_name && !objTags.hasOwnProperty(member.party_name)) objTags.party_name[member.party_name] = false;
 		});
@@ -57,12 +61,20 @@ let memberList = class extends React.Component {
 		this.setState({reverse});// ES6 shorthand for {reverse:reverse}
 	}
 
-	_updateFilter(category = null, filter = null) {
+	_updateFilter(category = null, filter = null, value = null) {
 		if (!category || !filter) return;
 		this.setState((prevState)=>{
-			let filters = { ...prevState.filters };									// Copy the filters object from the state. ES6 shorthand for Object.assign()
-			filters[category][filter] = !filters[category][filter];	// Update the target property                
-			return { filters };                   									// Return new filters object. ES6 shorthand for {filters:filters}
+			let filters = { ...prevState.filters };					// Copy the filters object from the state. ES6 shorthand for Object.assign()
+
+			// Update the target property 
+			if (typeof filters[category][filter] === 'boolean') {
+				// If it's boolean, then just flip it.
+				filters[category][filter] = !filters[category][filter]; 
+			} else {
+				// Otherwise, set the value.
+				filters[category][filter] = value;
+			}    
+			return { filters };                   					// Return new filters object. ES6 shorthand for {filters:filters}
 		});
 	}
 
@@ -104,7 +116,9 @@ let memberList = class extends React.Component {
 		1.	Loop through the categories. Each one is a property in a member.
 		2.	Loop through the filters in the category. If there are true values, then the 
 				member must match one of them in order to pass.
-		3.	If there are no true values, then no check is required. Continue with the loop.
+		3.  If there is text in the name filter input, then that text must appear in the 
+			member's first or last name in order to pass.
+		4.	If there are no true values, then no check is required. Continue with the loop.
 		*/
 
 		let objFilters = this.state.filters;
@@ -112,31 +126,50 @@ let memberList = class extends React.Component {
 		Object.keys(objFilters).forEach((category)=>{
 
 			let trueFilters = Object.keys(objFilters[category]).filter((filter)=>{
-				return objFilters[category][filter]===true;
+				// If the filter has a value.
+				return objFilters[category][filter];
 			});
 
-			// If they're all false, then give this category a pass.
+			// If they're all false, then skip this category.
 			if (!trueFilters.length) return;
 
 			/*
 			Now we have an array of true values, like ["2020","2024"]
 			The member must have a value that matches something in the array.
+			This is just for booleans, not messing with the text category just yet.
 			*/
-			if (!trueFilters.includes(member[category])) {
+			if (category !== 'text' && !trueFilters.includes(member[category])) {
 				matchesFilters = false;
 			}
 
 			/*
-			One more check to do. If we're filtering by the next election, then the House 
-			will always pass because they come up every two years. The only reason to filter 
-			by year is to find out when a Senator is up for re-election. If a year is chosen, 
-			fail this check for Representatives.
+			If we're filtering by the next election, then the House will always pass because 
+			they come up every two years. The only reason to filter by year is to find out 
+			when a Senator is up for re-election. If a year is chosen, fail this check for 
+			Representatives.
 			*/
 			if (category === 'next_election' && member.chamber === "House") {
 				matchesFilters = false;
 			}
 
+			/*
+			At this point the booleans have worked out one way or the other, but there's one 
+			more check to do. If the match is still good at this point, we need to check the 
+			text category. If there's text in the name search input, then the member must have 
+			that text in their first or last name.
+			*/
+			if (matchesFilters === true && category === 'text') {
+				// The handler function will pass in null if the string is less than 3 characters.
+				if (objFilters.text.name) {
+					// First and last name, lowercase and with no spaces.
+					let strName = (member.first_name + member.last_name).toLowerCase().replace(/\s/g, '');
 
+					// The string in the input must be in the name string in order to match.
+					if ( !strName.toLowerCase().replace(/\s/g, '').includes(objFilters.text.name) ) {
+						matchesFilters = false;
+					}
+				}
+			}
 		});
 		return matchesFilters;
 	}
@@ -172,7 +205,7 @@ let memberList = class extends React.Component {
 
 	_getMemberItems(chamber = 'both') {
 
-		let members = this._getFilteredSorted(); // This will return a new and sorted array of members.
+		let members = this._getFilteredSorted(); // This will return a new filtered and sorted array of members.
 
 		return members.map((member) =>{
 			let partyColor = 'success';
@@ -222,6 +255,12 @@ let memberList = class extends React.Component {
 		$('#myModal').modal('show');
 	}
 
+	_handleInputChange(evt) {
+		let value = evt.target.value;
+		if(value.length < 3) value = null;
+		this._updateFilter('text', 'name', value);
+	}
+
 	render() {
 		let that = this;
 		let RC = this.state.RC;
@@ -234,6 +273,12 @@ let memberList = class extends React.Component {
 						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="filters" onClick={that._handleLaunchModal}>Filters</button>
 						<button type="button" className="d-inline-block btn btn-light flex-fill border border-dark w-50" data-view="sorting" onClick={that._handleLaunchModal}>Sorting</button>
 					</div>
+				</div>
+			</div>
+			<div className="row">
+				<div className="col">
+					<input className="form-control form-control-lg" type="text" placeholder="Filter by name" onChange={this._handleInputChange}/>
+					<small className="d-block mt-1 mb-3 px-3"><em>Filtering by name requires at least three characters.</em></small>
 				</div>
 			</div>
 			<div className="row">
