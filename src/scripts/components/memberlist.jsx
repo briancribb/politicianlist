@@ -165,7 +165,7 @@ let memberList = class extends React.Component {
 					let strName = (member.first_name + member.last_name).toLowerCase().replace(/\s/g, '');
 
 					// The string in the input must be in the name string in order to match.
-					if ( !strName.toLowerCase().replace(/\s/g, '').includes(objFilters.text.name) ) {
+					if ( !strName.toLowerCase().replace(/\s/g, '').includes(objFilters.text.name.toLowerCase()) ) {
 						matchesFilters = false;
 					}
 				}
