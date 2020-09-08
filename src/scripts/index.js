@@ -1,4 +1,8 @@
 //import utils from '../../../_vendor/tmc/utils';
+//import React from "../../../../node_modules/react";
+//import ReactDOM from "../../../../node_modules/react-dom";
+
+
 import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states';
 import memberList from './components/memberlist';
