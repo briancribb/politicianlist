@@ -32,7 +32,7 @@ https://theunitedstates.io/images/congress/[size]/[bioguide].jpg
 */
 let RC = {memberList,modal};
 let POL = {
-	congress: 116,
+	congress: 117,
 	init: function() {
 
 		this.utils = setupUtils();
