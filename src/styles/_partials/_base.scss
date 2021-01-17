@@ -1,7 +1,24 @@
+html {
+	font-size: 16px;
+}
+
+.member .card-header {
+	text-align: center;
+	.party {
+		font-size: 1.5rem;
+	}
+	.next {
+		font-size: 1.25rem;		
+	}
+}
+
 .list-wrapper {
 	max-width: 540px
 }
 .member-photo-wrapper {
+	.member-photo {
+		display:block;
+	}
 	.missing-photo {
 		display:none;
 	}
@@ -14,29 +31,48 @@
 		}
 	}
 }
-
 .missing-photo .fa-user {
 	font-size:4rem;
+}
+.member-info-wrapper {
+	text-align: center;
 }
 
 
 @include media-breakpoint-up(sm) {
+	html {
+		font-size: 18px;
+	}
+	.member .card-header {
+		text-align: left;
+		.party, .next {
+			font-size: 1rem;
+		}
+	}
 	.member-photo-wrapper  {
 		max-width: 30%;
 	}
 	.member-info-wrapper {
 		max-width: 70%;
+		padding-left: 1rem;
+		text-align: left;
 	}
 	.missing-photo .fa-user {
 		font-size:5rem;
 	}
 }
 @include media-breakpoint-up(md) {
+	html {
+		font-size: 20px;
+	}
 	.missing-photo .fa-user {
 		font-size:6rem;
 	}
 }
 @include media-breakpoint-up(lg) {
+	html {
+		font-size: 22px;
+	}
 	.member-photo-wrapper {
 		max-width: 40%;
 	}
