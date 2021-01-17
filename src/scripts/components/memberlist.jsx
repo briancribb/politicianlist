@@ -220,21 +220,21 @@ let memberList = class extends React.Component {
 
 			return(
 				<div data-member-id={member.id} className={'card mb-3 border border-'+partyColor} key={member.id}>
-					<div className={'card-header bg-'+partyColor+' text-white d-flex justify-content-between'}>
+					<div className={'card-header bg-'+partyColor+' text-white d-sm-flex justify-content-between'}>
 						<div><i className={this._getIconClass(member.party) + ' mr-2'}></i>
 						{member.party_name}</div>
 						<div>Next: <strong>{member.next_election}</strong></div>
 					</div>
 					<div className="card-body">
-						<div className="d-flex">
-							<div className="member-photo-wrapper mr-2 mr-md-3">
-								<img className="member-photo img-fluid" onError={this._handleImageError} src={'https://theunitedstates.io/images/congress/225x275/'+ member.id +'.jpg'} loading="lazy" alt={'Photo of ' + this._getMemberName(member)} />
+						<div className="d-sm-flex">
+							<div className="member-photo-wrapper mb-2 mb-sm-0 mx-auto ml-sm-0 mr-sm-2 mr-md-3">
+								<img className="member-photo img-fluid d-block mx-auto" onError={this._handleImageError} src={member.member_photo_link} loading="lazy" alt={'Photo of ' + this._getMemberName(member)} />
 								<div className="missing-photo text-center">
 									<i className="fas fa-user mb-3 text-secondary"></i>
 									<small className="d-block">Photo not available</small>
 								</div>
 							</div>
-							<div className="member-info-wrapper">
+							<div className="member-info-wrapper text-center text-sm-left">
 								<h5 className="card-title mb-1">{this._getMemberName(member)}</h5>
 								<div className="mb-0">{member.state_name}</div>
 								<div className="mb-0">{'Age: '+member.age}</div>

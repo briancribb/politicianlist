@@ -1,9 +1,7 @@
 .list-wrapper {
 	max-width: 540px
 }
-
 .member-photo-wrapper {
-	max-width: 30%;
 	.missing-photo {
 		display:none;
 	}
@@ -16,11 +14,6 @@
 		}
 	}
 }
-.member-info-wrapper {
-	max-width: 70%;
-}
-
-
 
 .missing-photo .fa-user {
 	font-size:4rem;
@@ -28,6 +21,12 @@
 
 
 @include media-breakpoint-up(sm) {
+	.member-photo-wrapper  {
+		max-width: 30%;
+	}
+	.member-info-wrapper {
+		max-width: 70%;
+	}
 	.missing-photo .fa-user {
 		font-size:5rem;
 	}

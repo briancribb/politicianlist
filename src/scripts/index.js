@@ -5,6 +5,7 @@
 
 import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states';
+import missing from './missing';
 import memberList from './components/memberlist';
 import modal from './components/modal';
 /*
@@ -98,6 +99,13 @@ let POL = {
 					age--; // Hasn't had a birthday this year.
 				}
 				member.age = age;
+
+				// If it's a known missing image, use a local photo.
+				member.missing_photo = (!missing[member.id]) ? false : true;
+				member.member_photo_link = (!missing[member.id]) 
+				? 'https://theunitedstates.io/images/congress/225x275/'+ member.id +'.jpg'
+				: 'src/images/missing/225x275/'+ member.id +'.jpg'
+				;
 
 				if (everyone.filter((m)=>{return m.id===member.id}).length > 1) {
 					// Make an array if there isn't one yet, then add member to it.
