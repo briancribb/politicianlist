@@ -221,9 +221,9 @@ let memberList = class extends React.Component {
 			return(
 				<div data-member-id={member.id} className={'member card mb-3 border border-'+partyColor} key={member.id}>
 					<div className={'card-header bg-'+partyColor+' text-white d-sm-flex justify-content-between'}>
-						<div class="party"><i className={this._getIconClass(member.party) + ' mr-2'}></i>
+						<div className="party"><i className={this._getIconClass(member.party) + ' mr-2'}></i>
 						&nbsp;{member.party_name} - {member.id}</div>
-						<div class="next">Next: <strong>{member.next_election}</strong></div>
+						<div className="next">Next: <strong>{member.next_election}</strong></div>
 					</div>
 					<div className="card-body">
 						<div className="d-sm-flex">
