@@ -48,6 +48,7 @@ var missing = {
     "N000026": "Troy Nehls",
     "N000192": "Marie Newman",
     "O000019": "Jay Obernolte",
+    "O000174": "Jon Ossoff",
     "O000086": "Burgess Owens",
     "P000048": "August Pfluger",
     "R000103": "Matt Rosendale",
@@ -59,6 +60,7 @@ var missing = {
     "T000486": "Ritchie Torres",
     "T000278": "Tommy Tuberville",
     "V000134": "Beth Van Duyne",
+    "W000790": "Raphael Warnock",
     "W000788": "Nikema Williams",
 }
 export default missing;
