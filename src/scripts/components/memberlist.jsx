@@ -5,7 +5,7 @@ let memberList = class extends React.Component {
 		super(props);
 		this.state = {
 			members:  	this.props.members,
-			RC:  	this.props.parent,
+			RC:  		this.props.parent,
 			filters: 	{},
 			reverse: 	false,
 			sortBy: 	'last_name',
@@ -64,7 +64,7 @@ let memberList = class extends React.Component {
 	_updateFilter(category = null, filter = null, value = null) {
 		if (!category || !filter) return;
 		this.setState((prevState)=>{
-			let filters = { ...prevState.filters };					// Copy the filters object from the state. ES6 shorthand for Object.assign()
+			let filters = { ...prevState.filters }; // Copy the filters object from the state. ES6 shorthand for Object.assign()
 
 			// Update the target property 
 			if (typeof filters[category][filter] === 'boolean') {

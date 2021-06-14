@@ -3,7 +3,7 @@
 //import ReactDOM from "../../../../node_modules/react-dom";
 
 
-import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce} from '../../../../_vendor/tmc/tmc-utils';
+import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce, tmc_getParams} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states';
 import missing from './missing';
 import memberList from './components/memberlist';
@@ -133,10 +133,11 @@ let POL = {
 
 		function setupUtils() {
 			tmc_RAF();// Polyfills the window.requestAnimationFrame object.
-			let ut = tmc_documentHidden();// returns several settings in an object
-			ut.trans_end = tmc_transEnd();// returns the name of the transition end event
-			ut.throttle = tmc_throttle;
-			ut.debounce = tmc_debounce;
+			let ut 			= tmc_documentHidden();// returns several settings in an object
+			ut.trans_end 	= tmc_transEnd();// returns the name of the transition end event
+			ut.throttle 	= tmc_throttle;
+			ut.debounce 	= tmc_debounce;
+			ut.getParams 	= tmc_getParams;
 			return ut;
 		}
 
@@ -149,6 +150,9 @@ let POL = {
 	},
 	getAllMembers : function() {
 		return this.senate.members.concat(this.house.members);
+	},
+	getQueryParams : function() {
+
 	},
 	getData : function(congress, chamber) {
 		return $.ajax({
