@@ -38,7 +38,6 @@ let POL = {
 
 		this.utils = setupUtils();
 
-
 		let housePromise = new Promise((resolve, reject) => {
 			this.getData(this.congress,'house').then((data)=>{
 				resolve(updateMembers(data.results[0]));
@@ -140,6 +139,14 @@ let POL = {
 			ut.getParams 	= tmc_getParams;
 			return ut;
 		}
+
+		/*
+		TODO: Get/set filters from local storage to reduce calls to the server. Use a timestamp 
+		to make sure we still call once a day, but we're probably going to have to refresh the 
+		page to get new query string parameters into the address bar. Then the user can just 
+		copy/paste the url to share a specific search.
+		*/
+		//console.log('this.utils.getParams()', this.utils.getParams());
 
 		Promise.all([housePromise, senatePromise]).then((allResults)=>{
 			ReactDOM.render(

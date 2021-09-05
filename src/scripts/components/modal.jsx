@@ -20,6 +20,16 @@ let modal = class extends React.Component {
 		this._handleSortClick 	= this._handleSortClick.bind(this);
 		this._handleFilterClick = this._handleFilterClick.bind(this);
 		this._handleResetClick 	= this._handleResetClick.bind(this);
+		this._handleCloseClick 	= this._handleCloseClick.bind(this);
+		this._handleCloseModal	= this._handleCloseModal.bind(this);
+	}
+
+	componentDidMount() {
+		window.addEventListener('hide.bs.modal', this._handleCloseModal);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('hide.bs.modal', this._handleCloseModal);
 	}
 
 	_getFilterContent() {
@@ -100,6 +110,14 @@ let modal = class extends React.Component {
 		}
 	}
 
+	_handleCloseClick(evt) {
+		$('#myModal').modal('hide');
+	}
+	_handleCloseModal(evt) {
+		//TODO: Run filters only when the modal closes. Add a "Set Filters" button.
+		//console.log('The modal closed', evt);
+	}
+
 	render() {
 		let that = this;
 		let modalMarkup = this.props.modalView === 'filters' ? this._getFilterContent() : this._getSortingContent();
@@ -110,7 +128,7 @@ let modal = class extends React.Component {
 					<div className="modal-content">
 						<div className="modal-header">
 							<h5 className="modal-title" id="myModalLabel">{title}</h5>
-							<button type="button" className="btn-close" data-dismiss="modal" aria-label="Close"></button>
+							<button type="button" className="btn-close" data-dismiss="modal" aria-label="Close" onClick={this._handleCloseClick}></button>
 						</div>
 						{modalMarkup}
 					</div>
