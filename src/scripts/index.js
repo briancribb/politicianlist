@@ -35,44 +35,54 @@ let RC = {memberList,modal};
 let POL = {
 	congress: 117,
 	init: function() {
+		this.utils = this.setupUtils();
+		let housePromise, senatePromise, allResults;
 
-		this.utils = setupUtils();
+		/*
+		Check local storage to see if we already have data from the past 24 hours. If it's there 
+		then it's already processed and can be used immediately. If not, get data from the API, 
+		process it and put it together.
+		*/
+		let localStored = this.getStored();
 
-		let housePromise = new Promise((resolve, reject) => {
-			this.getData(this.congress,'house').then((data)=>{
-				resolve(this.updateMembers(data.results[0]));
+		if (localStored) {
+			housePromise = Promise.resolve(localStored.house);
+			senatePromise = Promise.resolve(localStored.senate)
+		} else {
+			housePromise = new Promise((resolve, reject) => {
+				this.getData(this.congress,'house').then((data)=>{
+					resolve(this.updateMembers(data.results[0]));
+				});
 			});
-		});
-		let senatePromise = new Promise((resolve, reject) => {
-			this.getData(this.congress,'senate').then((data)=>{
-				resolve(this.updateMembers(data.results[0]));
+			senatePromise = new Promise((resolve, reject) => {
+				this.getData(this.congress,'senate').then((data)=>{
+					resolve(this.updateMembers(data.results[0]));
+				});
 			});
-		});
-
-		function setupUtils() {
-			tmc_RAF();// Polyfills the window.requestAnimationFrame object.
-			let ut 			= tmc_documentHidden();// returns several settings in an object
-			ut.trans_end 	= tmc_transEnd();// returns the name of the transition end event
-			ut.throttle 	= tmc_throttle;
-			ut.debounce 	= tmc_debounce;
-			ut.getParams 	= tmc_getParams;
-			return ut;
 		}
 
 		/*
 		TODO: Get/set filters from local storage to reduce calls to the server. Use a timestamp 
 		to make sure we still call once a day, but we're probably going to have to refresh the 
 		page to get new query string parameters into the address bar. Then the user can just 
-		copy/paste the url to share
+		copy/paste the url to share.
 		*/
-		//console.log('this.utils.getParams()', this.utils.getParams());
-
 		Promise.all([housePromise, senatePromise]).then((allResults)=>{
+			/*
+			The "localStored" variable will be null if there's no data in the past 24 hours. 
+			If it's null then the "allResults" data comes from the API and we should store it.
+			*/
+			if (!localStored) {
+				localStorage.setItem('politicianlist_'+this.congress, JSON.stringify({
+					timestamp: Date.now(),
+					house: allResults[0],
+					senate: allResults[1]
+				}));
+			}
 			ReactDOM.render(
 				<RC.memberList parent={RC} members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
 			);
 		});
-		//console.log('POL, RC', POL, RC);
 	},
 	updateMembers : function(obj) {
 		/*
@@ -152,6 +162,29 @@ let POL = {
 		}
 
 		return updatedMembers;
+	},
+	setupUtils: function() {
+		tmc_RAF();// Polyfills the window.requestAnimationFrame object.
+		let ut 			= tmc_documentHidden();// returns several settings in an object
+		ut.trans_end 	= tmc_transEnd();// returns the name of the transition end event
+		ut.throttle 	= tmc_throttle;
+		ut.debounce 	= tmc_debounce;
+		ut.getParams 	= tmc_getParams;
+		return ut;
+	},
+	getStored: function() {
+		let stored = localStorage.getItem('politicianlist_'+this.congress);
+		if (!stored) return null;
+
+		let storedData = JSON.parse(stored),
+			oneDay = 24 * 60 * 60,
+			now = Date.now();
+
+		/*
+		If we have data for this congress within the past 24 hours, return that data to be 
+		used instead of hitting the API again. If not, then return null.
+		*/
+		return ( now - storedData.timestamp < oneDay ) ? storedData : null;
 	},
 	getAllMembers : function() {
 		return this.senate.members.concat(this.house.members);
