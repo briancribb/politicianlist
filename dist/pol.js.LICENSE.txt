@@ -1,11 +1,3 @@
-/*! exports provided: default */
-
-/*! exports provided: tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce, encodeHtmlEntities, decodeHtmlEntities, tmc_splitOnTags, tmc_groupBy, tmc_getParams */
-
-/*! no exports provided */
-
-/*! no static exports found */
-
 /*!**********************************!*\
   !*** ./_vendor/tmc/tmc-utils.js ***!
   \**********************************/
@@ -33,15 +25,3 @@
 /*!*********************************************************************!*\
   !*** ./github/politicianlist/src/scripts/components/memberlist.jsx ***!
   \*********************************************************************/
-
-/*!****************************************************************************!*\
-  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
-  \****************************************************************************/
-
-/*!********************************************************************************************************!*\
-  !*** multi ./github/politicianlist/src/scripts/index.js ./github/politicianlist/src/styles/index.scss ***!
-  \********************************************************************************************************/
-
-/*!**************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-1!./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./github/politicianlist/src/styles/index.scss ***!
-  \**************************************************************************************************************************************************************************************************/
