@@ -6,7 +6,7 @@
 import {tmc_transEnd, tmc_documentHidden, tmc_RAF, tmc_throttle, tmc_debounce, tmc_getParams} from '../../../../_vendor/tmc/tmc-utils';
 import states from './states';
 import missing from './missing';
-import memberList from './components/memberlist';
+import MemberList from './components/Memberlist';
 import modal from './components/modal';
 /*
 Member objects from ProPublica only have abbreviations for states, so this handy 
@@ -31,7 +31,7 @@ object is the bioguide property for the image.
 https://github.com/unitedstates/images
 https://theunitedstates.io/images/congress/[size]/[bioguide].jpg
 */
-let RC = {memberList,modal};
+let RC = {MemberList,modal};
 let POL = {
 	congress: 118,
 	init: function() {
@@ -79,9 +79,16 @@ let POL = {
 					senate: allResults[1]
 				}));
 			}
-			ReactDOM.render(
-				<RC.memberList parent={RC} members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
-			);
+			console.log({members:allResults[0].concat(allResults[1])});
+			//ReactDOM.render(
+			//	<RC.memberList parent={RC} members={allResults[0].concat(allResults[1])} />, document.getElementById('app')
+			//);
+			console.log('app and stuff');
+			let domNode = document.getElementById('app');
+			const root = ReactDOM.createRoot(domNode);
+			root.render(React.createElement(MemberList,{members:allResults[0].concat(allResults[1])},null));
+			//root.render(<MemberList name="Stuff and Things" />);
+
 		});
 	},
 	updateMembers : function(obj) {
