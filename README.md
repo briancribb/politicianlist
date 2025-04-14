@@ -1,7 +1,7 @@
 # ALERT: Propublica Discontinued Their API
 I'm working on something using the official api from congress, but that will take a while. I'm leaving the code here for now, but sadly, it won't work anymore.
 
-The new plan is to get a set of local data for both chambers of Congress and update it frequently. That way I won't be worried about rate limits or even a shutdown of the API itself. If the thing gets pulled, I can update the data another way. The new repo is called (Gather Congress)[https://github.com/briancribb/gather-congress]. Once that's done, I'll rebuild this app from scratch. It'll be a good way to use newer tools and make everything all shiny and pretty.
+The new plan is to get a set of local data for both chambers of Congress and update it frequently. That way I won't be worried about rate limits or even a shutdown of the API itself. If the thing gets pulled, I can update the data another way. The new repo is called [Gather Congress](https://github.com/briancribb/gather-congress). Once that's done, I'll rebuild this app from scratch. It'll be a good way to use newer tools and make everything all shiny and pretty.
 
 ## Old ReadMe Contentn for Politician List
 Ever find yourself wondering when a senator is up for re-election, or what state or even what party a representative is from? You can do a web search on each one or you can just check this list. You can see the app by going to [politicianlist.com](https://politicianlist.com/ "Politicianlist").
