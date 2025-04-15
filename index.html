@@ -1,57 +1,15 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="description" content="A small project for playing with Propublica data.">
-		<meta name="author" content="Brian Cribb">
-		<title>politicianlist</title>
-
-		<link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
-		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
-		<link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
-
-		<!-- Bootstrap core CSS -->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
-		<link href="dist/pol.css?cb=20210704" rel="stylesheet">
-
-		<!-- Global site tag (gtag.js) - Google Analytics -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-31458680-2"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-
-			gtag('config', 'UA-31458680-2');
-		</script>
-	</head>
-	<body>
-		<div class="container pt-3">
-			<div class="row">
-				<div class="col text-center">
-					<h1>Politicianlist</h1>
-				</div>
-			</div>
-			<div className="row">
-				<div class="col px-0">
-					<p>This is a list of all active members of the 118th Congress, using data from ProPublica. Started out as a list of when senators are up for re-election. Made by <a title="The Mighty Cribb website" href="https://www.themightycribb.com/">Brian Cribb</a> using <a title="Politicianlist GitHub Repository" href="https://github.com/briancribb/politicianlist">this GitHub repo</a>.</p>
-				</div>
-			</div>
-		</div>
-		<div id="app">
-			<div class="row">
-				<div class="col text-center p-5">
-					<i class="fas fa-spinner fa-5x fa-spin"></i>
-				</div>
-			</div>
-		</div>
-
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" crossorigin="anonymous"></script>
-
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-		<script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-		<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-
-		<script src="dist/pol.js?cb=20210704"></script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="root" class="container-fluid"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
