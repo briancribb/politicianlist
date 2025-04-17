@@ -2,9 +2,10 @@ import { useState } from 'react';
 import './MemberList.scss';
 import utils from './assets/utils';
 import memberListData from './assets/memberListData';
+import testData from './assets/transform';
 
 function MemberList() {
-  console.log({utils,memberListData});
+  console.log({utils,memberListData,testData});
   const [memberData] = useState(memberListData.members);
 
 
