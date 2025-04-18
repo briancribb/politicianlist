@@ -1,3 +1,123 @@
+html {
+  font-size: 16px;
+}
+
 .container {
-  max-width: 30rem;
+  max-width: 540px;
+}
+
+.member .card-header {
+  text-align: center;
+  .party {
+    font-size: 1.5rem;
+  }
+  .next {
+    font-size: 1.25rem;   
+  }
+}
+
+.list-wrapper {
+  max-width: 540px
+}
+.member-photo-wrapper {
+  .member-photo {
+    display:block;
+  }
+  .missing-photo {
+    display:none;
+  }
+  &.image-error {
+    .member-photo {
+      display:none;
+    }
+    .missing-photo {
+      display:block;
+    }
+  }
+}
+.missing-photo .fa-user {
+  font-size:4rem;
+}
+.member-info-wrapper {
+  text-align: center;
+}
+
+
+
+
+
+// Transitions and Transformations
+// ================================
+
+.trans-right {
+  -webkit-transition:right .25s linear;
+  transition:right .25s linear;
+}
+.trans-padding {
+  -webkit-transition:padding .25s linear;
+  transition:padding .25s linear;
+}
+.trans-bg-position {
+  -webkit-transition:background-position .5s linear;
+  transition:background-position .5s linear;
+}
+
+
+
+// Media Queries
+// ================================
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+  html {
+    font-size: 18px;
+  }
+  .member .card-header {
+    text-align: left;
+    .party, .next {
+      font-size: 1rem;
+    }
+  }
+  .member-photo-wrapper  {
+    max-width: 30%;
+  }
+  .member-info-wrapper {
+    max-width: 70%;
+    padding-left: 1rem;
+    text-align: left;
+  }
+  .missing-photo .fa-user {
+    font-size:5rem;
+  }
+}
+
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+  html {
+    font-size: 20px;
+  }
+  .missing-photo .fa-user {
+    font-size:6rem;
+  }
+}
+
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  html {
+    font-size: 22px;
+  }
+  .container {
+    max-width: 720px;
+  }
+  .member-photo-wrapper {
+    max-width: 40%;
+  }
+  .member-info-wrapper {
+    max-width: 60%;
+  }
+  .list-wrapper {
+    max-width: 720px
+  }
 }

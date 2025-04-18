@@ -35,7 +35,7 @@ function MemberList() {
           partyColor = 'primary'
           break;
       }
-
+      if (member.imageUrl === "" || !member.imageUrl) console.log("Missing stuff:", member);
 
       return (
         <div key={`key_${member.id}`} className={'member card mb-3 border border-'+partyColor}>
