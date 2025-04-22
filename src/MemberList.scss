@@ -6,6 +6,11 @@ html {
   max-width: 540px;
 }
 
+.modal {
+  display: block!important;
+  background: rgba(0, 0, 0, .8);
+}
+
 .member .card-header {
   text-align: center;
   .party {
