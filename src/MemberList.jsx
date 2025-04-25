@@ -2,28 +2,31 @@ import { useState, useEffect } from 'react';
 import './MemberList.scss';
 import memberListData from './assets/memberListData';
 import Modal from './Modal';
+import moodyImageUrl from "./assets/Ashley_Moody_M001244.jpg";
 
 export default function MemberList() {
-  console.log({memberListData});
+  //console.log({memberListData});
   const [allMembers] = useState(memberListData.members);
   const [modalOpen, setModalOpen] = useState(false);
   const [textMatch, setTextMatch] = useState("");
-  const [filters, setFilters] = useState([]);
-  const [sortBy, setSortBy] = useState({property: "name", reverse: false});
-
-  const handleTextSearch = (evt)=>{
-    console.log("handleTextSearch", evt.target.value);
-    setTextMatch(evt.target.value);
-  }
-  const handleModalClose = (evt)=>{
-    setTextMatch("");
-    setModalOpen(false);
-  }
+  const [filters, setFilters] = useState({chamber:[],partyName:[],reelectionYear:[], stateCode:[]});
+  const [sortBy, setSortBy] = useState({property: "lastNameFirst", reverse: false});
 
   useEffect(()=>{
-    console.log("-- MemberList() - useEffect()");
+    //console.log("-- MemberList() - useEffect()");
   });
 
+
+  const handleTextSearch = (evt)=>{
+    setTextMatch(evt.target.value);
+  }
+
+  const handleModalClose = (objUpdate = null)=>{
+    console.log("handleModalClose()", objUpdate);
+    setModalOpen(false);
+    if (!objUpdate) return;
+    setTextMatch("");
+  }
 
   const getIconClass = (party)=>{
     let objClasses = {
@@ -36,7 +39,7 @@ export default function MemberList() {
 
   const getRepDistrict = (member)=>{
     if (member.type === "Representative") {
-      return <div className="mb-0">{`District ${member.district}`}</div>;
+      return <div className="mb-0">{`District: ${member.district}`}</div>;
     } else {
       return null;
     }
@@ -50,16 +53,25 @@ export default function MemberList() {
         pass = false;
       }
 
-
-
-
-
       return pass;
     });
 
-    let sortedMembers = filteredMembers;
+    filteredMembers.sort((a,b)=>{
+      let itemA = a[sortBy.property].toString().toUpperCase();
+      let itemB = b[sortBy.property].toString().toUpperCase();
 
-    return sortedMembers;
+      // Regular sorting.
+      if (itemA < itemB) return -1;
+      if (itemA > itemB) return 1;
+
+      return 0;
+    });
+    if (sortBy.reverse) {
+      filteredMembers.reverse();
+    }
+
+
+    return filteredMembers;
   }
 
   const getMembers = ()=>{
@@ -75,11 +87,11 @@ export default function MemberList() {
           partyColor = 'primary'
           break;
       }
-      if (member.imageUrl === "" || !member.imageUrl) console.log("Missing stuff:", member);
-
+      //if (member.imageUrl === "" || !member.imageUrl) console.log("Missing stuff:", member);
+      if (member.id === "M001244" && !member.imageUrl) member.imageUrl = moodyImageUrl;
 
       return (
-        <div key={`key_${member.id}`} className={'member card mb-3 border border-'+partyColor}>
+        <div id={member.id} key={`key_${member.id}`} className={'member card mb-3 border border-'+partyColor}>
           <div className={'card-header bg-'+partyColor+' text-white d-sm-flex justify-content-between'}>
             <div className="party"><i className={getIconClass(member.partyAbbr) + ' mr-2'}></i>
             &nbsp;{`${member.partyName} ${member.type}`}</div>
