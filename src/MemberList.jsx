@@ -10,7 +10,7 @@ export default function MemberList() {
   const [modalOpen, setModalOpen] = useState(false);
   const [textMatch, setTextMatch] = useState("");
   const [sorting, setSorting] = useState({property: "lastNameFirst", reverse: false});
-  const [filters, setFilters] = useState({Senate:false,House:false,Republican:false,Democrat:false,2026:false,2028:false,2030:false,State:""});
+  const [filters, setFilters] = useState({Senate:false,House:false,Republican:false,Democrat:false,"2026":false,"2028":false,"2030":false,State:""});
   const [modalProps, setModalProps] = useState({
     filter: {chamber:[],partyName:[],reelectionYear:[], stateCode:[]},
     sort: {property: "lastNameFirst", reverse: false}

@@ -29,7 +29,7 @@ function Modal(props) {
   const handleFilterChange = (evt)=>{
     let obj = {...modalFilters};
     if (["state"].includes(evt.target.id)) {
-      obj.state = evt.target.value;
+      obj.State = evt.target.value;
       console.log("State select.", obj);
     } else {
       obj[evt.target.id] = !!!obj[evt.target.id]
@@ -41,7 +41,7 @@ function Modal(props) {
     if (["modal","btn-close"].includes(evt.target.id)) {
       handleModalClose(null);
     } else if (["apply"].includes(evt.target.id)) {
-      handleModalClose({sorting:modalSorting});
+      handleModalClose({sorting:modalSorting, filters:modalFilters});
     }
   }
 
@@ -70,7 +70,7 @@ function Modal(props) {
         <div className="row">
           <div className="col-4 pe-0">{buttons[4]}</div>
           <div className="col-4 px-1">{buttons[5]}</div>
-          <div className="col-4 ps-0">{buttons[3]}</div>
+          <div className="col-4 ps-0">{buttons[6]}</div>
         </div>
       </div>
       </>
@@ -83,7 +83,7 @@ function Modal(props) {
     });
 
     return (
-      <select id="state" onChange={handleFilterChange} placeholder="Select a state" className="form-select border-primary text-primary" aria-label="Sort by state">
+      <select id="state" value={modalFilters.State} onChange={handleFilterChange} placeholder="Select a state" className="form-select border-primary text-primary" aria-label="Sort by state">
         <option key="key_default" value="" defaultValue>None</option>
         {options}
       </select>
