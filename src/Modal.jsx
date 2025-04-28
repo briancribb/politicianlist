@@ -3,36 +3,78 @@ import states from './assets/states';
 
 
 function Modal(props) {
-  console.log("Modal()");
-  const { handleModalClose, setSortBy } = props;
-  const [sortProp, setSortProp] = useState('lastNameFirst');
-  const [reverse, setReverse] = useState(false);
+  const { handleModalClose, filters, sorting } = props;
+  const [modalFilters, setModalFilters] = useState(null);
+  const [modalSorting, setModalSorting] = useState(null);
 
 
 
   useEffect(()=>{
-    //console.log("-- Modal() - useEffect()", states);
-  });
+    setModalFilters(filters);
+    setModalSorting(sorting);
+    console.log("-- Modal() - useEffect()", {handleModalClose, filters, sorting, modalFilters, modalSorting});
+  }, []);
 
 
   const handleSortField = (evt)=>{
+    let obj = {...modalSorting};
     if (["sort-by"].includes(evt.target.id)) {
-      console.log();
+      obj.property = evt.target.value;
     } else if (["reverse"].includes(evt.target.id)) {
-      console.log();
+      obj.reverse = evt.target.checked;
     }
+    setModalSorting(obj);
+  }
+
+  const handleFilterChange = (evt)=>{
+    let obj = {...modalFilters};
+    if (["state"].includes(evt.target.id)) {
+      obj.state = evt.target.value;
+      console.log("State select.", obj);
+    } else {
+      obj[evt.target.id] = !!!obj[evt.target.id]
+    }
+    setModalFilters(obj);
   }
 
   const handleCloseClick = (evt)=>{
     if (["modal","btn-close"].includes(evt.target.id)) {
       handleModalClose(null);
     } else if (["apply"].includes(evt.target.id)) {
-      handleModalClose({stuff:"things"});
+      handleModalClose({sorting:modalSorting});
     }
   }
 
   const getFilterButtons = ()=>{
-
+    const filterKeys = ["Senate","House","Republican","Democrat","2026","2028","2030"];
+    let buttons = filterKeys.map((key)=>{
+      //const activeClass = modalFilters[key] ? " active" : "";
+      const activeClass = modalFilters[key] ? " active" : "";
+      return (<button key={key} id={key} type="button" className={`btn btn-outline-primary${activeClass} w-100`} onClick={handleFilterChange}>{key}</button>);
+    });
+    return (
+      <>
+      <div className="d-grid w-100 mb-1" role="group" aria-label="Filter by Chamber">
+        <div className="row">
+        <div className="col-6 pe-1">{buttons[0]}</div>
+        <div className="col-6 ps-1">{buttons[1]}</div>
+        </div>
+      </div>
+      <div className="d-grid w-100 mb-1" role="group" aria-label="Filter by Chamber">
+        <div className="row">
+        <div className="col-6 pe-1">{buttons[2]}</div>
+        <div className="col-6 ps-1">{buttons[3]}</div>
+        </div>
+      </div>
+      <div className="d-grid w-100 mb-1" role="group" aria-label="Filter by Chamber">
+        <div className="row">
+          <div className="col-4 pe-0">{buttons[4]}</div>
+          <div className="col-4 px-1">{buttons[5]}</div>
+          <div className="col-4 ps-0">{buttons[3]}</div>
+        </div>
+      </div>
+      </>
+    );
   }
 
   const getStateSelect = ()=>{
@@ -41,13 +83,14 @@ function Modal(props) {
     });
 
     return (
-      <select id="state" onChange={handleSortField} placeholder="Select a state" className="form-select border-primary text-primary" aria-label="Sort by state">
+      <select id="state" onChange={handleFilterChange} placeholder="Select a state" className="form-select border-primary text-primary" aria-label="Sort by state">
         <option key="key_default" value="" defaultValue>None</option>
         {options}
       </select>
     );
   }
 
+  if (!modalSorting || !modalFilters) return(<></>);
   return (
     <>
       <div className="modal fade show" id="modal" onClick={handleCloseClick} tabIndex="-1" aria-labelledby="modal-label" aria-modal="true" role="dialog">
@@ -60,29 +103,19 @@ function Modal(props) {
             <div className="modal-body">
               <div className="mb-4">
                 <label htmlFor="sort-by" className="form-label">Sort By</label>
-                <select id="sort-by" onChange={handleSortField} placeholder="Sort by" className="form-select mb-2" aria-label="Sort by">
+                <select id="sort-by" value={modalSorting.property} onChange={handleSortField} placeholder="Sort by" className="form-select mb-2" aria-label="Sort by">
                   <option key="0" value="lastNameFirst" defaultValue>Last Name</option>
-                  <option key="1" value="birthYear">Birth Year</option>
+                  <option key="1" value="birthYear">Age</option>
                   <option key="2" value="reelectionYear">Next Election</option>
                 </select>
                 <div className="form-check form-switch">
-                  <input id="reverse" onChange={handleSortField} className="form-check-input" type="checkbox" role="switch" />
+                  <input id="reverse" onChange={handleSortField} className="form-check-input" type="checkbox" role="switch" checked={modalSorting.reverse} />
                   <label className="form-check-label" htmlFor="reverse">Reverse order</label>
                 </div>
               </div>
               <h2 className="modal-title fs-3">Filter By</h2>
-              <div className="btn-group w-100 mb-1" role="group" aria-label="Modal launch buttons">
-                <button type="button" className="btn btn-outline-primary w-50">Senate</button>
-                <button type="button" className="btn btn-outline-primary w-50">House</button>
-              </div>
-              <div className="btn-group w-100 mb-1" role="group" aria-label="Modal launch buttons">
-                <button type="button" className="btn btn-outline-primary w-50">Republican</button>
-                <button type="button" className="btn btn-outline-primary w-50">Democrat</button>
-              </div>
-              <div className="btn-group w-100 mb-3" role="group" aria-label="Modal launch buttons">
-                <button type="button" className="btn btn-outline-primary">2026</button>
-                <button type="button" className="btn btn-outline-primary">2028</button>
-                <button type="button" className="btn btn-outline-primary">2030</button>
+              <div className="w-100" role="group" aria-label="Modal launch buttons">
+                {getFilterButtons()}
               </div>
               {getStateSelect()}
             </div>

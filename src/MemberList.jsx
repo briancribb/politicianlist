@@ -9,11 +9,15 @@ export default function MemberList() {
   const [allMembers] = useState(memberListData.members);
   const [modalOpen, setModalOpen] = useState(false);
   const [textMatch, setTextMatch] = useState("");
-  const [filters, setFilters] = useState({chamber:[],partyName:[],reelectionYear:[], stateCode:[]});
-  const [sortBy, setSortBy] = useState({property: "lastNameFirst", reverse: false});
+  const [sorting, setSorting] = useState({property: "lastNameFirst", reverse: false});
+  const [filters, setFilters] = useState({Senate:false,House:false,Republican:false,Democrat:false,2026:false,2028:false,2030:false,State:""});
+  const [modalProps, setModalProps] = useState({
+    filter: {chamber:[],partyName:[],reelectionYear:[], stateCode:[]},
+    sort: {property: "lastNameFirst", reverse: false}
+  });
 
   useEffect(()=>{
-    //console.log("-- MemberList() - useEffect()");
+    //console.log("-- MemberList() - useEffect()", allMembers);
   });
 
 
@@ -22,9 +26,10 @@ export default function MemberList() {
   }
 
   const handleModalClose = (objUpdate = null)=>{
-    console.log("handleModalClose()", objUpdate);
     setModalOpen(false);
     if (!objUpdate) return;
+    if (objUpdate.sorting) setSorting(objUpdate.sorting);
+    if (objUpdate.filters) setFilters(objUpdate.filters);
     setTextMatch("");
   }
 
@@ -55,10 +60,19 @@ export default function MemberList() {
 
       return pass;
     });
-
     filteredMembers.sort((a,b)=>{
-      let itemA = a[sortBy.property].toString().toUpperCase();
-      let itemB = b[sortBy.property].toString().toUpperCase();
+      let itemA = a[sorting.property].toString().toUpperCase();
+      let itemB = b[sorting.property].toString().toUpperCase();
+
+      /*
+      Flipping "a" and "b" because we have a birth year and we're trying to sort by age.
+      Going backwards here will put the youngest first on regular and the oldest first on reverse.
+      */
+      if (sorting.property === "birthYear") {
+        itemA = parseInt(b[sorting.property]);
+        itemB = parseInt(a[sorting.property]);
+      }
+
 
       // Regular sorting.
       if (itemA < itemB) return -1;
@@ -66,7 +80,7 @@ export default function MemberList() {
 
       return 0;
     });
-    if (sortBy.reverse) {
+    if (sorting.reverse) {
       filteredMembers.reverse();
     }
 
@@ -87,9 +101,8 @@ export default function MemberList() {
           partyColor = 'primary'
           break;
       }
-      //if (member.imageUrl === "" || !member.imageUrl) console.log("Missing stuff:", member);
-      if (member.id === "M001244" && !member.imageUrl) member.imageUrl = moodyImageUrl;
 
+      if (member.id === "M001244" && !member.imageUrl) member.imageUrl = moodyImageUrl;
       return (
         <div id={member.id} key={`key_${member.id}`} className={'member card mb-3 border border-'+partyColor}>
           <div className={'card-header bg-'+partyColor+' text-white d-sm-flex justify-content-between'}>
@@ -122,7 +135,7 @@ export default function MemberList() {
 
   const getModal = ()=>{
     if (!modalOpen) return null;
-    return <Modal handleModalClose={handleModalClose} setSortBy={setSortBy} />
+    return <Modal handleModalClose={handleModalClose} filters={filters} sorting={sorting} />
   }
 
 
