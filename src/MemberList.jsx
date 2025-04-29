@@ -10,15 +10,15 @@ export default function MemberList() {
   const [modalOpen, setModalOpen] = useState(false);
   const [textMatch, setTextMatch] = useState("");
   const [sorting, setSorting] = useState({property: "lastNameFirst", reverse: false});
-  const [filters, setFilters] = useState({Senate:false,House:false,Republican:false,Democrat:false,"2026":false,"2028":false,"2030":false,State:""});
+  const [filters, setFilters] = useState({Senate:false,House:false,Republican:false,Democratic:false,"2026":false,"2028":false,"2030":false,State:""});
   const [modalProps, setModalProps] = useState({
     filter: {chamber:[],partyName:[],reelectionYear:[], stateCode:[]},
     sort: {property: "lastNameFirst", reverse: false}
   });
 
   useEffect(()=>{
-    //console.log("-- MemberList() - useEffect()", allMembers);
-  });
+    console.log("-- MemberList() - useEffect()", allMembers);
+  }, []);
 
 
   const handleTextSearch = (evt)=>{
@@ -54,12 +54,50 @@ export default function MemberList() {
   const getFilteredAndSorted = ()=>{
     let filteredMembers = allMembers.filter((member)=> {
       let pass = true;
-      if (textMatch.length >= 3 && !member.lastNameFirst.toLowerCase().includes( textMatch.toLowerCase() )) {
+      let chamber = member.chamber;
+      const arrYears = ["2026","2028","2030"];
+      const filteredYears = arrYears.filter((strYear)=>{
+          return filters[strYear] === true;
+      });
+
+
+      // If these two are both on or both off, then we just don't filter by them.
+      // If the membmer chamber doesn't have a true in the filters, then it fails.
+      if (chamber !== "Senate") chamber = "House";
+      if( filters.Senate !== filters.House && !filters[chamber] ) {
+        pass = false;
+      }
+        
+      if( filters.Republican !== filters.Democratic && !filters[member.partyName] ) {
         pass = false;
       }
 
+      // If all three are selected then we're not filtering by year.
+      if (filteredYears.length > 0 && filteredYears.length < 3) {
+        if (!filteredYears.includes(String(member.reelectionYear)) ) {
+          pass = false;
+          console.log("Failed");
+        }
+      }
+
+      // If we're filtering by year then we exclude the house, because they're up every two years 
+      // and the user is looking for the Senate.
+      if ( filteredYears.length < 3 && chamber === "House") {
+        pass = false;
+      }
+
+      /*
+      TODO: Filter by state.
+      */
+
+
+      if (textMatch.length >= 3 && !member.lastNameFirst.toLowerCase().includes( textMatch.toLowerCase() )) {
+        pass = false;
+      }
       return pass;
     });
+
+
     filteredMembers.sort((a,b)=>{
       let itemA = a[sorting.property].toString().toUpperCase();
       let itemB = b[sorting.property].toString().toUpperCase();

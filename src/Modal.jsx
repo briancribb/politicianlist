@@ -46,7 +46,7 @@ function Modal(props) {
   }
 
   const getFilterButtons = ()=>{
-    const filterKeys = ["Senate","House","Republican","Democrat","2026","2028","2030"];
+    const filterKeys = ["Senate","House","Republican","Democratic","2026","2028","2030"];
     let buttons = filterKeys.map((key)=>{
       //const activeClass = modalFilters[key] ? " active" : "";
       const activeClass = modalFilters[key] ? " active" : "";
