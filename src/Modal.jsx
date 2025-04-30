@@ -30,7 +30,6 @@ function Modal(props) {
     let obj = {...modalFilters};
     if (["state"].includes(evt.target.id)) {
       obj.State = evt.target.value;
-      console.log("State select.", obj);
     } else {
       obj[evt.target.id] = !!!obj[evt.target.id]
     }
@@ -40,6 +39,17 @@ function Modal(props) {
   const handleCloseClick = (evt)=>{
     if (["modal","btn-close"].includes(evt.target.id)) {
       handleModalClose(null);
+    } else if (["reset"].includes(evt.target.id)) {
+
+      let updatedFilters = {};
+      Object.keys(filters).forEach((key)=>{
+        let negValue = false;
+        if (key === "State") negValue = '';
+        updatedFilters[key] = negValue;
+      });
+      setModalFilters(updatedFilters);
+      setModalSorting({property: "lastNameFirst", reverse: false});
+
     } else if (["apply"].includes(evt.target.id)) {
       handleModalClose({sorting:modalSorting, filters:modalFilters});
     }
@@ -103,23 +113,24 @@ function Modal(props) {
             <div className="modal-body">
               <div className="mb-4">
                 <label htmlFor="sort-by" className="form-label">Sort By</label>
-                <select id="sort-by" value={modalSorting.property} onChange={handleSortField} placeholder="Sort by" className="form-select mb-2" aria-label="Sort by">
+                <select id="sort-by" value={modalSorting.property} onChange={handleSortField} placeholder="Sort by" className="form-select border-primary text-primary mb-2" aria-label="Sort by">
                   <option key="0" value="lastNameFirst" defaultValue>Last Name</option>
                   <option key="1" value="birthYear">Age</option>
                   <option key="2" value="reelectionYear">Next Election</option>
                 </select>
                 <div className="form-check form-switch">
-                  <input id="reverse" onChange={handleSortField} className="form-check-input" type="checkbox" role="switch" checked={modalSorting.reverse} />
+                  <input id="reverse" onChange={handleSortField} className="form-check-input border-primary text-primary" type="checkbox" role="switch" checked={modalSorting.reverse} />
                   <label className="form-check-label" htmlFor="reverse">Reverse order</label>
                 </div>
               </div>
-              <h2 className="modal-title fs-3">Filter By</h2>
+              <label className="form-label">Filter By</label>
               <div className="w-100" role="group" aria-label="Modal launch buttons">
                 {getFilterButtons()}
               </div>
               {getStateSelect()}
             </div>
             <div className="modal-footer">
+              <button id="reset" type="button" className="btn btn-primary">Reset</button>
               <button id="apply" type="button" className="btn btn-primary">Apply</button>
             </div>
           </div>

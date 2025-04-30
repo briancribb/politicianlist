@@ -65,36 +65,32 @@ export default function MemberList() {
       // If the membmer chamber doesn't have a true in the filters, then it fails.
       if (chamber !== "Senate") chamber = "House";
       if( filters.Senate !== filters.House && !filters[chamber] ) {
-        pass = false;
+        return false;
       }
         
       if( filters.Republican !== filters.Democratic && !filters[member.partyName] ) {
-        pass = false;
+        return false;
       }
 
       // If all three are selected then we're not filtering by year.
       if (filteredYears.length > 0 && filteredYears.length < 3) {
-        if (!filteredYears.includes(String(member.reelectionYear)) ) {
-          pass = false;
-          console.log("Failed");
+        if (!filteredYears.includes(String(member.reelectionYear) || chamber === "House") ) {
+          return false;
         }
+
+        // If we're filtering by year then we exclude the house, because they're up every two years 
+        // and the user is looking for the Senate.
+        if ( chamber === "House") return false;
       }
 
-      // If we're filtering by year then we exclude the house, because they're up every two years 
-      // and the user is looking for the Senate.
-      if ( filteredYears.length < 3 && chamber === "House") {
-        pass = false;
+      if (filters.State !== "" && member.stateCode !== filters.State) {
+        return false;
       }
-
-      /*
-      TODO: Filter by state.
-      */
-
 
       if (textMatch.length >= 3 && !member.lastNameFirst.toLowerCase().includes( textMatch.toLowerCase() )) {
-        pass = false;
+        return false;
       }
-      return pass;
+      return true;
     });
 
 
@@ -175,15 +171,15 @@ export default function MemberList() {
     if (!modalOpen) return null;
     return <Modal handleModalClose={handleModalClose} filters={filters} sorting={sorting} />
   }
-
+https://api.congress.gov/
 
   return (
     <>
       <div className="container pt-5">
         <h1>Politician List</h1>
-        <p className="lead">A list of current members of Congress</p>
-        <p>I need to build something to show off some modern code, so I just grabbed the array of members from three direct calls in the browser and imported it. This is enough to get started.</p>
-        <p>Here's the <a target="_blank" href="https://github.com/briancribb/gather-congress/">GitHub repo</a> for this utility.</p>
+        <p className="lead">A list of current members of the 119th Congress</p>
+        <p>I need to build something to show off some modern code, so I grabbed some stuff from the <a target="_blank" href="https://api.congress.gov/">Congress.gov API</a>. It's a long list of everybody, but you can filter the list down and sort it a few different ways.</p>
+        <p>Here's the <a target="_blank" href="https://github.com/briancribb/politicianlist/">GitHub repo</a> for this utility. I built the back-end data with Node. Here's the repo for that: <a target="_blank" href="https://github.com/briancribb/gather-congress/">Gather Congress</a></p>
       </div>
 
       <div className="container">
